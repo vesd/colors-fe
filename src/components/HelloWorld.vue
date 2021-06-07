@@ -46,23 +46,28 @@ export default {
     }
   },
   async mounted () {
-    const colors = (await ColorsService.index()).data
-
-    this.colors = colors.map(color => {
-      color.isHovered = false
-
-      return color
-    })
+    await this.getColors()
   },
   methods: {
+    async getColors () {
+      const colors = (await ColorsService.index()).data
+
+      this.colors = colors.map(color => {
+        color.isHovered = false
+
+        return color
+      })
+    },
     async deleteColor (colorId) {
       await ColorsService.delete(colorId)
+      await this.getColors()
     },
     async addColor () {
       await ColorsService.post({
         name: this.colorName,
         hex: this.colorValue.substring(1)
       })
+      await this.getColors()
     },
     setHover (color) {
       color.isHovered = true
