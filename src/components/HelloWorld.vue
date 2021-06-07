@@ -1,17 +1,29 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <input type="color" v-model="colorValue" value="#e66465" />
+    <input type="color" v-model="colorValue" />
+    <input type="text" v-model="colorValue" placeholder="Add color code..." />
     <input type="text" v-model="colorName" placeholder="Add name..." />
     <button @click="addColor">Add</button>
     <p v-if="!colors.length">Loading colors...</p>
-    <ul v-else>
-      <li v-for="(color, i) in colors" :key="i">
-        {{ color.name }} - {{ color.hex }}
-        <span class="color" :style="{background: `#${color.hex}`}" />
-        <span class="delete" @click="deleteColor(color.id)">X</span>
-      </li>
-    </ul>
+    <div
+      v-else
+      class="parent"
+    >
+      <div
+        v-for="(color, i) in colors" :key="i"
+        class="child"
+        :style="{background: `#${color.hex}`}"
+        @mouseover="setHover(color)"
+        @mouseleave="unsetHover(color)"
+      >
+      <div v-show="color.isHovered">
+        <h3>{{ color.name }}</h3>
+        <h4>{{ `#${color.hex}` }}</h4>
+        <h2 @click="deleteColor(color.id)">x</h2>
+      </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -27,11 +39,17 @@ export default {
     return {
       colors: [],
       colorName: null,
-      colorValue: null
+      colorValue: '#e66465'
     }
   },
   async mounted () {
-    this.colors = (await ColorsService.index()).data
+    const colors = (await ColorsService.index()).data
+
+    this.colors = colors.map(color => {
+      color.isHovered = false
+
+      return color
+    })
   },
   methods: {
     async deleteColor (colorId) {
@@ -42,6 +60,12 @@ export default {
         name: this.colorName,
         hex: this.colorValue.substring(1)
       })
+    },
+    setHover (color) {
+      color.isHovered = true
+    },
+    unsetHover (color) {
+      color.isHovered = false
     }
   }
 }
@@ -67,5 +91,13 @@ a {
   height: 15px;
   border: 1px solid black;
   display: inline-block;
+}
+.parent {
+  display: flex;
+  justify-content: center;
+}
+.child {
+  width: 200px;
+  height: 300px;
 }
 </style>
