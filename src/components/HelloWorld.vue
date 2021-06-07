@@ -17,10 +17,13 @@
         @mouseover="setHover(color)"
         @mouseleave="unsetHover(color)"
       >
-      <div v-show="color.isHovered">
+      <div
+        class="content"
+        :class="{ active: color.isHovered }"
+      >
         <h3>{{ color.name }}</h3>
         <h4>{{ `#${color.hex}` }}</h4>
-        <h2 @click="deleteColor(color.id)">x</h2>
+        <span class="delete" @click="deleteColor(color.id)">x</span>
       </div>
       </div>
     </div>
@@ -99,5 +102,28 @@ a {
 .child {
   width: 200px;
   height: 300px;
+}
+.content {
+  opacity: 0;
+  transition: 0.2s ease-out;
+
+  &.active {
+    opacity: 1;
+  }
+}
+.delete {
+  font-size: 28px;
+  font-weight: bold;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  line-height: 27px;
+  transition: 0.2s ease-out;
+  border-radius: 5px;
+
+  &:hover {
+    background: rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
 }
 </style>
