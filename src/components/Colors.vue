@@ -62,17 +62,18 @@ export default {
 
 <style scoped lang="scss">
 .colors {
-  background-color: salmon;
+  // background-color: salmon;
   height: 400px;
+  flex: 1;
 
   .parent {
     display: flex;
     justify-content: center;
+    height: 100%;
   }
 
   .child {
-    width: 200px;
-    height: 300px;
+    flex: 1;
   }
 
   .content {

@@ -35,7 +35,7 @@ export default {
 
 <style scoped lang="scss">
 .controls {
-  background-color: navajowhite;
+  // background-color: navajowhite;
   height: 100px;
 
   h1 {

@@ -46,7 +46,7 @@ export default {
 
 <style scoped lang="scss">
 .header {
-  background-color: pink;
+  // background-color: pink;
   height: 50px;
 
   p {
