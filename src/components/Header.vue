@@ -21,9 +21,6 @@ import AuthService from '@/services/AuthService'
 
 export default {
   name: 'Header',
-  props: {
-    msg: String
-  },
   data () {
     return {
       username: 'admin',
