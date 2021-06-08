@@ -1,51 +1,49 @@
 <template>
   <div class="hello">
-    <button
-      v-if="!$store.state.isUserLoggedIn"
-      @click="login"
-    >
-      Log in
-    </button>
-    <button
-      v-else
-      @click="logout"
-    >
-      Log out
-    </button>
-    <p v-if="$store.state.isUserLoggedIn">{{ $store.state.user.username }}</p>
-    <h1>{{ msg }}</h1>
-    <div v-if="$store.state.isUserLoggedIn">
-      <input type="color" v-model="colorValue" />
-      <input type="text" v-model="colorValue" placeholder="Add color code..." />
-      <input type="text" v-model="colorName" placeholder="Add name..." />
-      <button @click="addColor">Add</button>
-    </div>
-    <p v-if="!colors.length">Loading colors...</p>
-    <div
-      v-else
-      class="parent"
-    >
-      <div
-        v-for="(color, i) in colors" :key="i"
-        class="child"
-        :style="{background: `#${color.hex}`}"
-        @mouseover="setHover(color)"
-        @mouseleave="unsetHover(color)"
-      >
-      <div
-        class="content"
-        :class="{ active: color.isHovered }"
-      >
-        <h3>{{ color.name }}</h3>
-        <h4>{{ `#${color.hex}` }}</h4>
-        <span
-          v-if="$store.state.isUserLoggedIn"
-          class="delete"
-          @click="deleteColor(color.id)"
-        >
-          x
-        </span>
+
+    <div class="controls">
+      <h1 v-if="!$store.state.isUserLoggedIn">{{ msg }}</h1>
+      <div v-else>
+        <input type="color" v-model="colorValue" />
+        <input type="text" v-model="colorValue" placeholder="Add color code..." />
+        <input type="text" v-model="colorName" placeholder="Add name..." />
+        <button @click="addColor">Add</button>
       </div>
+    </div>
+
+    <div class="colors">
+      <div
+        v-if="!colors.length"
+        class="spinner"
+      >
+        Loading colors...
+      </div>
+      <div
+        v-else
+        class="parent"
+      >
+        <div
+          v-for="(color, i) in colors" :key="i"
+          class="child"
+          :style="{background: `#${color.hex}`}"
+          @mouseover="setHover(color)"
+          @mouseleave="unsetHover(color)"
+        >
+        <div
+          class="content"
+          :class="{ active: color.isHovered }"
+        >
+          <h3>{{ color.name }}</h3>
+          <h4>{{ `#${color.hex}` }}</h4>
+          <span
+            v-if="$store.state.isUserLoggedIn"
+            class="delete"
+            @click="deleteColor(color.id)"
+          >
+            x
+          </span>
+        </div>
+        </div>
       </div>
     </div>
   </div>
@@ -53,7 +51,6 @@
 
 <script>
 import ColorsService from '@/services/ColorsService'
-import AuthService from '@/services/AuthService'
 
 export default {
   name: 'HelloWorld',
@@ -64,9 +61,7 @@ export default {
     return {
       colors: [],
       colorName: null,
-      colorValue: '#e66465',
-      username: 'admin',
-      password: 'admin'
+      colorValue: '#e66465'
     }
   },
   async mounted () {
@@ -98,34 +93,24 @@ export default {
     },
     unsetHover (color) {
       color.isHovered = false
-    },
-    async login () {
-      const response = await AuthService.login({
-        username: this.username,
-        password: this.password
-      })
-      this.$store.dispatch('setToken', response.data.token)
-      this.$store.dispatch('setUser', response.data.user)
-    },
-    logout () {
-      this.$store.dispatch('setToken', null)
-      this.$store.dispatch('setUser', null)
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
 ul {
   list-style-type: none;
   padding: 0;
 }
 li {
   margin: 0 10px;
+}
+h1 {
+  margin: 0;
+}
+p {
+  margin: 0;
 }
 a {
   color: #42b983;
@@ -166,5 +151,14 @@ a {
     background: rgba(0,0,0,0.05);
     cursor: pointer;
   }
+}
+
+.controls {
+  background-color: navajowhite;
+  height: 100px;
+}
+.colors {
+  background-color: salmon;
+  height: 400px;
 }
 </style>
