@@ -1,10 +1,25 @@
 <template>
   <div class="hello">
+    <button
+      v-if="!$store.state.isUserLoggedIn"
+      @click="login"
+    >
+      Log in
+    </button>
+    <button
+      v-else
+      @click="logout"
+    >
+      Log out
+    </button>
+    <p v-if="$store.state.isUserLoggedIn">{{ $store.state.user.username }}</p>
     <h1>{{ msg }}</h1>
-    <input type="color" v-model="colorValue" />
-    <input type="text" v-model="colorValue" placeholder="Add color code..." />
-    <input type="text" v-model="colorName" placeholder="Add name..." />
-    <button @click="addColor">Add</button>
+    <div v-if="$store.state.isUserLoggedIn">
+      <input type="color" v-model="colorValue" />
+      <input type="text" v-model="colorValue" placeholder="Add color code..." />
+      <input type="text" v-model="colorName" placeholder="Add name..." />
+      <button @click="addColor">Add</button>
+    </div>
     <p v-if="!colors.length">Loading colors...</p>
     <div
       v-else
@@ -23,7 +38,13 @@
       >
         <h3>{{ color.name }}</h3>
         <h4>{{ `#${color.hex}` }}</h4>
-        <span class="delete" @click="deleteColor(color.id)">x</span>
+        <span
+          v-if="$store.state.isUserLoggedIn"
+          class="delete"
+          @click="deleteColor(color.id)"
+        >
+          x
+        </span>
       </div>
       </div>
     </div>
@@ -32,6 +53,7 @@
 
 <script>
 import ColorsService from '@/services/ColorsService'
+import AuthService from '@/services/AuthService'
 
 export default {
   name: 'HelloWorld',
@@ -42,7 +64,9 @@ export default {
     return {
       colors: [],
       colorName: null,
-      colorValue: '#e66465'
+      colorValue: '#e66465',
+      username: 'admin',
+      password: 'admin'
     }
   },
   async mounted () {
@@ -74,6 +98,18 @@ export default {
     },
     unsetHover (color) {
       color.isHovered = false
+    },
+    async login () {
+      const response = await AuthService.login({
+        username: this.username,
+        password: this.password
+      })
+      this.$store.dispatch('setToken', response.data.token)
+      this.$store.dispatch('setUser', response.data.user)
+    },
+    logout () {
+      this.$store.dispatch('setToken', null)
+      this.$store.dispatch('setUser', null)
     }
   }
 }
