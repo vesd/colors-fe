@@ -1,12 +1,12 @@
 <template>
   <div class="controls">
-    <h1 v-if="!$store.state.isUserLoggedIn">Log in to add and remove colors</h1>
-    <div v-else>
+    <h2 v-if="!$store.state.isUserLoggedIn">Log in to add and remove colors</h2>
+    <template v-else>
       <input type="color" v-model="colorValue" />
-      <input type="text" v-model="colorValue" placeholder="Add color code..." />
-      <input type="text" v-model="colorName" placeholder="Add name..." />
+      <input class="color-value" type="text" v-model="colorValue" placeholder="Add color code..." />
+      <input class="color-name" type="text" v-model="colorName" placeholder="Add name..." />
       <button @click="addColor">Add</button>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
   data () {
     return {
       colorName: null,
-      colorValue: '#e66465'
+      colorValue: '#d1cccc'
     }
   },
   methods: {
@@ -35,11 +35,37 @@ export default {
 
 <style scoped lang="scss">
 .controls {
-  // background-color: navajowhite;
-  height: 100px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  h1 {
+  h2 {
     margin: 0;
+  }
+
+  input {
+    margin-right: 4px;
+  }
+
+  input[type=text] {
+    height: 25px;
+    border: 1px solid #777;
+    border-radius: 3px;
+    padding: 0 6px;
+  }
+
+  .color-value {
+    width: 60px;
+  }
+
+  .color-name {
+    width: 100px;
+  }
+
+  button {
+    height: 27px;
+    padding: 0px 11px;
   }
 }
 </style>

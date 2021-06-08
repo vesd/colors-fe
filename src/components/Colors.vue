@@ -62,7 +62,6 @@ export default {
 
 <style scoped lang="scss">
 .colors {
-  // background-color: salmon;
   height: 400px;
   flex: 1;
 
@@ -79,6 +78,7 @@ export default {
   .content {
     opacity: 0;
     transition: 0.2s ease-out;
+    padding-top: 50px;
 
     &.active {
       opacity: 1;
